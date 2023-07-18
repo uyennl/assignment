@@ -1,21 +1,43 @@
 package control;
 
 import model.*;
-import util.CheckInput;
-import util.Validator;
-
-import java.text.spi.DateFormatSymbolsProvider;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.ArrayList;
 
 public class LibraryManagement {
+    public static Book searchByTitle(String title) {
+        for (Book book : Book.b) {
+            if (book.getTitle().equalsIgnoreCase(title)) {
+                return book;
+            }
+        }
+        return null;
+    }
 
+    public static Book searchById(String id) {
+        for (Book book : Book.b) {
+            if (book.getId().equals(id)) {
+                return book;
+            }
+        }
+        return null;
+    }
 
-
-
-
-
-
-
+    public static ArrayList<Book> searchByAuthor(String author) {
+        ArrayList<Book> result = new ArrayList<>();
+        for (Book book : Book.b) {
+            if (book.getAuthor().equalsIgnoreCase(author)) {
+                result.add(book);
+            }
+        }
+        return result;
+    }
 
 }
+
+
+
+
+
+
+
+

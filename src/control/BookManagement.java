@@ -11,7 +11,8 @@ public class BookManagement {
         int publicationyear = CheckInput.enterInt("Mời nhập năm xuất bản", false);
         String nxb = CheckInput.enterString("Mời nhập nxb");
         long price = CheckInput.enterLong("Mời nhập giá sách", true);
-        Book bk = new Book(id, title, author, publicationyear, nxb, price);
+        int quantity = CheckInput.enterInt("Mời nhập số lượng sách",true);
+        Book bk = new Book(id, title, author, publicationyear, nxb, price,quantity);
         Book.b.add(bk);
     }
 }
