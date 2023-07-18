@@ -1,129 +1,150 @@
 package view;
 
-import control.LibraryManagement;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.*;
 import java.util.Scanner;
 import model.Book;
 
 public class ManagementBookView {
-    public String checkAuthor(Scanner input) {
-        String author;
-        do {
-            author = input.nextLine().trim();
-            if (author.isEmpty() || containsDigit(author)) {
-                System.out.print("Author cannot be empty, please enter a valid Author: ");
-            } else {
-                break;
-            }
-        } while (true);
-        return author;
-    }
+    public static void searchBookById() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Nhập ID sách cần tìm kiếm: ");
+        String id = scanner.nextLine();
 
-    private boolean containsDigit(String author) {
-        for (char c : author.toCharArray()) {
-            if (Character.isDigit(c)) {
-                return true;
+        for (Book book : Book.b) {
+            if (book.getId().equals(id)) {
+                System.out.println("Thông tin sách:");
+                System.out.println("ID: " + book.getId());
+                System.out.println("Title: " + book.getTitle());
+                System.out.println("Author: " + book.getAuthor());
+                System.out.println("Publication Year: " + book.getPublicationyear());
+                System.out.println("NXB: " + book.getNxb());
+                System.out.println("Price: " + book.getPrice());
+                return;
             }
         }
-        return false;
+        System.out.println("Không tìm thấy sách với ID " + id);
     }
 
-    public void searchCustomer() {
+    public static void searchBookByAuthor() {
         Scanner scanner = new Scanner(System.in);
-        boolean tiepTuc = true;
-        while (tiepTuc){
-            System.out.println("    Books");
-            System.out.println("-------------------------");
-            System.out.println("1. Search by ID ");
-            System.out.println("2. Search by Author");
-            System.out.println("3. Update");
-            System.out.println("4. Exit");
-            System.out.println("---------------------------");
-            System.out.print("Enter selection: ");
-            String selection = scanner.nextLine();
+        System.out.print("Nhập Tác giả của sách cần tìm kiếm: ");
+        String author = scanner.nextLine();
 
-            switch (selection) {
-                case "1":
-                    System.out.print("Enter ID: ");
-                    String ID = scanner.nextLine();
+        boolean found = false;
+        for (Book book : Book.b) {
+            if (book.getAuthor().equals(author)) {
+                System.out.println("Thông tin sách:");
+                System.out.println("ID: " + book.getId());
+                System.out.println("Title: " + book.getTitle());
+                System.out.println("Author: " + book.getAuthor());
+                System.out.println("Publication Year: " + book.getPublicationyear());
+                System.out.println("NXB: " + book.getNxb());
+                System.out.println("Price: " + book.getPrice());
+                found = true;
+            }
+        }
+        if (!found) {
+            System.out.println("Không tìm thấy sách của tác giả " + author);
+        }
+    }
 
-                    Book book = LibraryManagement.searchById(ID);
-                    if (book != null) {
-                        System.out.println("List of Books");
-                        System.out.println("-------------------------");
-                        System.out.println(ID);
-                        System.out.println("-------------------------");
-                        System.out.println("Total: 1 Book");
-                    } else {
-                        System.out.println("No book found!");
-                    }
-                    break;
-                case "2":
-                    System.out.print("Enter Author: ");
+    public static void updateBooksToFile() {
+        try {
+            Scanner scanner = new Scanner(System.in);
+            System.out.print("Nhập ID sách muốn cập nhật: ");
+            String id = scanner.nextLine();
+
+            File file = new File("src/data/kho.txt");
+            File tempFile = new File("src/data/kho_temp.txt");
+            PrintWriter writer = new PrintWriter(tempFile);
+
+            for (Book book : Book.b) {
+                if (book.getId().equals(id)) {
+                    System.out.println("Nhập thông tin mới cho sách:");
+                    System.out.print("Author: ");
                     String author = scanner.nextLine();
-                    ArrayList<Book> foundBooks = LibraryManagement.searchByAuthor(author);
-                    if (!foundBooks.isEmpty()) {
-                        System.out.println("List of Books");
-                        System.out.println("-------------------------");
-                        for (Book foundBook : foundBooks) {
-                            System.out.println(foundBook);
-                        }
-                        System.out.println("-------------------------");
-                        System.out.println("Total: " + foundBooks.size() + " Book");
-                    } else {
-                        System.out.println("No book found!");
-                    }
+                    System.out.print("Price: ");
+                    double price = scanner.nextDouble();
+                    System.out.print("Quantity: ");
+                    int quantity = scanner.nextInt();
+                    scanner.nextLine(); // consume the newline left by nextInt()
+
+                    book.setAuthor(author);
+                    book.setPrice((int) price);
+                    book.setQuantity(quantity);
+
+                    System.out.println("Đã cập nhật thông tin sách có ID " + id);
+                }
+
+                writer.println(book.getId() + "," + book.getTitle() + "," + book.getAuthor() + "," +
+                        book.getPublicationyear() + "," + book.getNxb() + "," + book.getPrice() + "," + book.getQuantity());
+            }
+
+            writer.close();
+            boolean successful = tempFile.renameTo(file);
+
+            if (successful) {
+                System.out.println("Đã cập nhật và lưu danh sách vào file " + file.getAbsolutePath());
+            } else {
+                System.out.println("Lỗi: Không thể cập nhật danh sách sách");
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("Lỗi: Không tìm thấy file");
+        }
+    }
+
+    public static void checkBookAvailability() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Nhập ID sách cần kiểm tra: ");
+        String id = scanner.nextLine();
+
+        for (Book book : Book.b) {
+            if (book.getId().equals(id)) {
+                if (book.getQuantity() > 0) {
+                    System.out.println("Sách còn trong kho");
+                } else {
+                    System.out.println("Sách đã hết trong kho");
+                }
+                return;
+            }
+        }
+        System.out.println("Không tìm thấy sách với ID " + id);
+    }
+
+    public static void searchCustomer(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int choice = 0;
+
+        while (choice != 6) {
+            System.out.println("------ Menu -------");
+            System.out.println("1. Tìm kiếm sách bằng ID");
+            System.out.println("2. Tìm kiếm sách bằng Tác giả");
+            System.out.println("3. Cập nhật thông tin sách");
+            System.out.println("4. Kiểm tra tình trạng sách");
+            System.out.println("5. Thoát");
+            System.out.print("Vui lòng chọn: ");
+            choice = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (choice) {
+                case 1:
+                    searchBookById();
                     break;
-                case "3":
-                    updateBook();
+                case 2:
+                    searchBookByAuthor();
                     break;
-                case "4":
-                    tiepTuc = false;
-                    System.out.println("Application exited.");
+                case 3:
+                    updateBooksToFile();
+                    break;
+                case 4:
+                    checkBookAvailability();
+                    break;
+                case 5:
+                    System.out.println("Đã thoát");
                     break;
                 default:
-                    System.out.println("Invalid choice!Please choose again.");
+                    System.out.println("Lựa chọn không hợp lệ, vui lòng thử lại");
             }
         }
     }
-
-    public void updateBook() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter the ID to update information: ");
-        String ID = scanner.nextLine();
-        Book bookToUpdate = LibraryManagement.searchById(ID);
-        if (bookToUpdate != null) {
-            System.out.println("Current Book information: ");
-            System.out.println(bookToUpdate);
-            System.out.print("Enter new Author: ");
-            String newAuthor = checkAuthor(scanner);
-
-            // Cập nhật thông tin sách
-            bookToUpdate.setAuthor(newAuthor);
-
-            // Lưu thông tin sách vào file
-            if (saveBookToFile(bookToUpdate)) {
-                System.out.println("Successfully updated book information.");
-            } else {
-                System.out.println("Failed to update book information.");
-            }
-        } else {
-            System.out.println("No book found.");
-        }
-    }
-
-    private boolean saveBookToFile(Book book) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("src//data//kho.txt", true))) {
-            writer.write(book.getId() + ";" + book.getTitle() + ";" + book.getAuthor() + ";" + book.getPublicationyear() + ";" +  book.getNxb() + ";" +  book.getPrice() + "\n");
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
 }

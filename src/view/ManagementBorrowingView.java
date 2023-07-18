@@ -5,57 +5,51 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 import model.Book;
+//import model.Date;
 import model.Librarian;
 import model.User;
 import model.Borrowing;
 
-public class ManagementBorrowingView {
+public class ManagementBorrowingView extends MenuGeneric {
 
-    private static  Scanner scanner = new Scanner(System.in);
-    private static  Librarian librarian = new Librarian();
+    private static Scanner scanner = new Scanner(System.in);
+    private static Librarian librarian = new Librarian();
 
-    public static void main(String[] args) {
-        while (true) {
-            System.out.println("1. Mượn sách");
-            System.out.println("2. Trả sách");
-            System.out.println("3. Gia hạn mượn");
-            System.out.println("4. Tra cứu sách");
-            System.out.println("0. Thoát");
-            System.out.print("Nhập lựa chọn của bạn: ");
-            int choice = scanner.nextInt();
-            scanner.nextLine();
-
-            switch (choice) {
-                case 1:
-                    borrowBook();
-                    break;
-
-                case 2:
-                    returnBook();
-                    break;
-
-                case 3:
-                    renewBook();
-                    break;
-
-                case 4:
-                    searchBook();
-                    break;
-
-                case 0:
-                    System.out.println("Kết thúc chương trình.");
-                    return;
-
-                default:
-                    System.out.println("Lựa chọn không hợp lệ.");
-                    break;
-            }
-
-            System.out.println();
-        }
+    public ManagementBorrowingView() {
+        super("Menu:", new String[]{"Mượn sách", "Trả sách", "Gia hạn mượn", "Tra cứu sách", "Thoát"});
     }
 
-    private static void borrowBook() {
+    @Override
+    public boolean execute(int choice) {
+        switch (choice) {
+            case 1:
+                borrowBook();
+                break;
+
+            case 2:
+                returnBook();
+                break;
+
+            case 3:
+                renewBook();
+                break;
+
+            case 4:
+                searchBook();
+                break;
+
+            case 5:
+                System.out.println("Kết thúc chương trình.");
+                return true;
+
+            default:
+                System.out.println("Lựa chọn không hợp lệ.");
+                break;
+        }
+        return false;
+    }
+
+    private void borrowBook() {
         System.out.print("Nhập tên người mượn: ");
         String userName = scanner.nextLine();
         User user = new User(userName);
@@ -64,13 +58,13 @@ public class ManagementBorrowingView {
         String bookTitle = scanner.nextLine();
         Book book = new Book(bookTitle);
 
-        Date borrowingDate = readDate("Nhập ngày mượn (ngày/tháng/năm): ");
-        Date returnDate = readDate("Nhập ngày trả (ngày/tháng/năm): ");
+        Calendar borrowingDate = readDate("Nhập ngày mượn (ngày/tháng/năm): ");
+        Calendar returnDate = readDate("Nhập ngày trả (ngày/tháng/năm): ");
 
         librarian.borrowBook(user, book, borrowingDate, returnDate);
     }
 
-    private static void returnBook() {
+    private void returnBook() {
         System.out.print("Nhập tên người trả sách: ");
         String returnUserName = scanner.nextLine();
         User returnUser = new User(returnUserName);
@@ -81,8 +75,7 @@ public class ManagementBorrowingView {
 
         librarian.returnBook(returnUser, returnBook);
     }
-
-    private static void renewBook() {
+    private void renewBook() {
         System.out.print("Nhập tên người gia hạn sách: ");
         String renewUserName = scanner.nextLine();
         User renewUser = new User(renewUserName);
@@ -91,18 +84,18 @@ public class ManagementBorrowingView {
         String renewBookTitle = scanner.nextLine();
         Book renewBook = new Book(renewBookTitle);
 
-        Date newReturnDate = readDate("Nhập ngày trả mới (ngày/tháng/năm): ");
+        Calendar newReturnDate = readDate("Nhập ngày trả mới (ngày/tháng/năm): ");
 
-        librarian.renewBook(renewUser, renewBook, newReturnDate);
+        librarian.renewBook(renewUser, renewBook, newReturnDate.getTime());
     }
 
-    private static void searchBook() {
+    private void searchBook() {
         System.out.print("Nhập tiêu đề sách cần tra cứu: ");
         String searchBookTitle = scanner.nextLine();
         librarian.searchBook(searchBookTitle);
     }
 
-    private static Date readDate(String message) {
+    private Calendar readDate(String message) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         sdf.setLenient(false);
 
@@ -113,7 +106,7 @@ public class ManagementBorrowingView {
                 Date date = sdf.parse(dateString);
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(date);
-                return new Date(calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.YEAR));
+                return calendar;
             } catch (ParseException e) {
                 System.out.println("Ngày tháng không hợp lệ. Vui lòng nhập lại.");
             }

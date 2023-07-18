@@ -27,14 +27,8 @@ public class Book {
         this.price = price;
     }
 
-    public Book(String id, String title, String author, int publicationyear, String nxb, long price, int quantity) {
-        this.id = id;
+    public Book(String title) {
         this.title = title;
-        this.author = author;
-        this.publicationyear = publicationyear;
-        this.nxb = nxb;
-        this.price = price;
-        this.quantity = quantity;
     }
 
     public String getId() {

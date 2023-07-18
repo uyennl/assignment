@@ -11,6 +11,10 @@ public abstract class Person {
     private String phone;
     private Calendar birth;
 
+    public Person(String name) {
+        this.name = name;
+    }
+
     public Person() {
     }
 
