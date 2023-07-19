@@ -13,11 +13,11 @@ import java.text.SimpleDateFormat;
 
 public class UserManagement {
     private String fileSave="Customer.txt";
-    ArrayList <User> users = new ArrayList<>();
 
-    public void addUser() {
+    public static User  addUser() {
+        System.out.println("Nhập Thông tin người mượn");
         String id = CheckInput.enterString("Mời nhập mã đọc giả", Validator.REGEX_USER_ID, (idStr) -> {
-            for (User u : User.arrus) {
+            for (User u : User.uss) {
                 if (u.getId().equals(idStr)) {
                     return true;
                 }
@@ -30,11 +30,12 @@ public class UserManagement {
         String phone = CheckInput.enterString("Mời nhập số điện thoại của độc giả", Validator.REGEX_PHONE_NUMBER);
         Calendar birth = CheckInput.enterDate("Ngày sinh của độc giả (dd/mm/yyyy)", "dd/MM/yyyy");
         User u = new User(id, name, age, sex, phone, birth);
-        User.arrus.add(u);
+        User.uss.add(u);
+        return u;
     }
     public void saveFileUser(){
         try(BufferedWriter writer = new BufferedWriter(new FileWriter(fileSave))) {
-            for(User usez: User.arrus){
+            for(User usez: User.uss){
                 writer.write(usez.getId()+", "+ usez.getName() +", "+ usez.getAge()+", " +usez.getSex()+ ", "+usez.getPhone()+", "+usez.getBirth() );
                 writer.newLine();
             }
@@ -62,7 +63,7 @@ public class UserManagement {
                     Calendar birth = Calendar.getInstance();
                     birth.set(dateOfBirth.getYear(), dateOfBirth.getMonthValue() - 1, dateOfBirth.getDayOfMonth());
                     User user = new User(id, name, age, sex, phone, birth);
-                    users.add(user);
+                    User.uss.add(user);
                 }
             }
             System.out.println("Read File Done!");

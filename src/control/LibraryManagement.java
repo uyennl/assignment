@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class LibraryManagement {
     public static Book searchByTitle(String title) {
-        for (Book book : Book.b) {
+        for (Book book : Book.bs) {
             if (book.getTitle().equalsIgnoreCase(title)) {
                 return book;
             }
@@ -14,7 +14,7 @@ public class LibraryManagement {
     }
 
     public static Book searchById(String id) {
-        for (Book book : Book.b) {
+        for (Book book : Book.bs) {
             if (book.getId().equals(id)) {
                 return book;
             }
@@ -24,7 +24,7 @@ public class LibraryManagement {
 
     public static ArrayList<Book> searchByAuthor(String author) {
         ArrayList<Book> result = new ArrayList<>();
-        for (Book book : Book.b) {
+        for (Book book : Book.bs) {
             if (book.getAuthor().equalsIgnoreCase(author)) {
                 result.add(book);
             }

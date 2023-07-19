@@ -1,7 +1,10 @@
 package view;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.function.Predicate;
+
 import model.Book;
 
 public class ManagementBookView {
@@ -9,8 +12,7 @@ public class ManagementBookView {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Nhập ID sách cần tìm kiếm: ");
         String id = scanner.nextLine();
-
-        for (Book book : Book.b) {
+        for (Book book : Book.bs) {
             if (book.getId().equals(id)) {
                 System.out.println("Thông tin sách:");
                 System.out.println("ID: " + book.getId());
@@ -31,7 +33,7 @@ public class ManagementBookView {
         String author = scanner.nextLine();
 
         boolean found = false;
-        for (Book book : Book.b) {
+        for (Book book : Book.bs) {
             if (book.getAuthor().equals(author)) {
                 System.out.println("Thông tin sách:");
                 System.out.println("ID: " + book.getId());
@@ -58,7 +60,7 @@ public class ManagementBookView {
             File tempFile = new File("src/data/kho_temp.txt");
             PrintWriter writer = new PrintWriter(tempFile);
 
-            for (Book book : Book.b) {
+            for (Book book : Book.bs) {
                 if (book.getId().equals(id)) {
                     System.out.println("Nhập thông tin mới cho sách:");
                     System.out.print("Author: ");
@@ -98,7 +100,7 @@ public class ManagementBookView {
         System.out.print("Nhập ID sách cần kiểm tra: ");
         String id = scanner.nextLine();
 
-        for (Book book : Book.b) {
+        for (Book book : Book.bs) {
             if (book.getId().equals(id)) {
                 if (book.getQuantity() > 0) {
                     System.out.println("Sách còn trong kho");
@@ -111,7 +113,8 @@ public class ManagementBookView {
         System.out.println("Không tìm thấy sách với ID " + id);
     }
 
-    public static void searchCustomer(String[] args) {
+
+    public static void searchBook(String[] args) {
         Scanner scanner = new Scanner(System.in);
         int choice = 0;
 

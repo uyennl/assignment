@@ -1,70 +1,37 @@
 package model;
 
-import java.io.File;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.function.Predicate;
+
 public class Library {
-    public static ArrayList<Customer> customerList = new ArrayList<>();
-    public static CompanyManagementIO cp = new CompanyManagementIO();
-    private static final String BASE_PATH = new File("").getAbsolutePath();
-    private static final String READ_PATH = "\\src\\data\\customer.txt";
-    private static final String WRITE_PATH = "\\src\\data\\customer1.txt";
 
-    public void config() {
-        try {
-            cp.readFile(BASE_PATH + READ_PATH);
+    public Library() {
+    }
 
-        } catch (ParseException e) {
-            e.printStackTrace();
+    public void borrowBook(User user, Book book, Calendar borrowingDate, Calendar returnDate) {
+        if (book.isBorrowed()) {
+            System.out.println("Sách đã được mượn.");
+        } else {
+            book.setBorrowed(true);
+            System.out.println("Sách '" + book.getTitle() + "' đã được mượn bởi " + user.getName());
+            System.out.println("Ngày mượn: " + borrowingDate.get(Calendar.DAY_OF_MONTH) + "/" + (borrowingDate.get(Calendar.MONTH) + 1) + "/" + borrowingDate.get(Calendar.YEAR));
+            System.out.println("Ngày trả: " + returnDate.get(Calendar.DAY_OF_MONTH) + "/" + (returnDate.get(Calendar.MONTH) + 1) + "/" + returnDate.get(Calendar.YEAR));
+            new BorrowCard(user, book, borrowingDate, returnDate); // Create a new borrowing record
 
         }
     }
-    public boolean saveFile(){
 
-        return cp.savefile(BASE_PATH+WRITE_PATH,customerList,(c)->c.toSaveString());
-    }
-    public void addCustomer(String id, String name, String phone, String birth) {
-        customerList.add(new Customer(id, name, phone, birth));
-    }
-
-    public void displayListCustomer() {
-        customerList.forEach((t) -> {
-            System.out.println(t);
-        });
-    }
-
-    public ArrayList<Customer> search(Predicate<Customer> p) {
-        ArrayList<Customer> rs = new ArrayList<>();
-        for (Customer s : customerList) {
-            if (p.test(s)) {
-                rs.add(s);
-            }
-        }
-        return rs;
-
-    }
-
-
-    public boolean update(Customer up, String data, String type){
-        switch (type) {
-            case "NAME":
-                up.setName(data);
-                return true;
-            case "PHONE":
-                up.setPhone(data);
-                return true;
-            case "BIRTHDAY":
-                up.setBirth(data);
-                return true;
-
-            default:
-                return false;
-
+    public void returnBook(User user, Book book) {
+        if (book.isBorrowed()) {
+            book.setBorrowed(false);
+            System.out.println("Sách '" + book.getTitle() + "' đã được trả bởi " + user.getName());
+        } else {
+            System.out.println("Sách không được mượn.");
         }
     }
+
+
+
 }

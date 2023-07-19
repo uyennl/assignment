@@ -1,60 +1,66 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class BorrowCard {
-    private User user;
-    private  Book book;
-    private ArrayList<Borrowing> borrow;
-    public static ArrayList<BorrowCard> brw = new ArrayList<>();
+    private User users;
+    private Book books;
+    private Borrowing broBorrowings;
+    public static ArrayList<BorrowCard> brcs = new ArrayList<>();
 
-    public BorrowCard(User user, Book book, ArrayList<Borrowing> borrow) {
-        this.user = user;
-        this.book = book;
-        this.borrow = borrow;
+    public BorrowCard(User users, Book books, Borrowing broBorrowings) {
+        this.users = users;
+        this.books = books;
+        this.broBorrowings = broBorrowings;
+    }
+
+    public BorrowCard(User users) {
+        this.users = users;
+    }
+
+    public BorrowCard(Book books) {
+        this.books = books;
+    }
+
+    public BorrowCard(Borrowing broBorrowings) {
+        this.broBorrowings = broBorrowings;
     }
 
     public BorrowCard() {
     }
 
-    public Book getBook() {
-        return book;
+
+    public User getUsers() {
+        return users;
     }
 
-    public void setBook(Book book) {
-        this.book = book;
+    public void setUsers(User users) {
+        this.users = users;
     }
 
-    public static ArrayList<BorrowCard> getBrw() {
-        return brw;
+    public Book getBooks() {
+        return books;
     }
 
-    public static void setBrw(ArrayList<BorrowCard> brw) {
-        BorrowCard.brw = brw;
+    public void setBooks(Book books) {
+        this.books = books;
     }
 
-    public User getUser() {
-        return user;
+    public Borrowing getBroBorrowings() {
+        return broBorrowings;
     }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public ArrayList<Borrowing> getBorrow() {
-        return borrow;
-    }
-
-    public void setBorrow(ArrayList<Borrowing> borrow) {
-        this.borrow = borrow;
+    public void setBroBorrowings(Borrowing broBorrowings) {
+        this.broBorrowings = broBorrowings;
     }
 
     @Override
     public String toString() {
         return "BorrowCard{" +
-                "user=" + user +
-                ", book=" + book +
-                ", borrow=" + borrow +
+                "users=" + users +
+                ", books=" + books +
+                ", broBorrowings=" + broBorrowings +
                 '}';
     }
 }

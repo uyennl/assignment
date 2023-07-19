@@ -11,15 +11,18 @@ public class Book {
     private int publicationyear;
     private String nxb;
     private long price;
+    private String type;
     private int quantity;
+    private boolean borrowed;
+    public static ArrayList<Book> bs = new ArrayList<>();
 
-    public static ArrayList<Book> b = new ArrayList<>();
 
     public Book() {
     }
 
-    public Book(String id, String title, String author, int publicationyear, String nxb, long price) {
+    public Book(String id,String type, String title, String author, int publicationyear, String nxb, long price) {
         this.id = id;
+        this.type = type;
         this.title = title;
         this.author = author;
         this.publicationyear = publicationyear;
@@ -43,13 +46,6 @@ public class Book {
         this.quantity = quantity;
     }
 
-    public static ArrayList<Book> getB() {
-        return b;
-    }
-
-    public static void setB(ArrayList<Book> b) {
-        Book.b = b;
-    }
 
     public void setId(String id) {
         this.id = id;
@@ -96,17 +92,46 @@ public class Book {
     }
 
     public boolean isBorrowed() {
-        // Implement the logic to check if the book is borrowed
-        // Return true if the book is currently borrowed, false otherwise
-        // You can implement this based on your requirements
-        // For example, you can add a new property 'borrowed' in Book class and set it accordingly when a book is borrowed or returned.
-        // For now, it will always return false since we don't have the logic to track book borrowing in this code snippet.
-        return false;
+        return borrowed;
+    }
+
+    public void setBorrowed(boolean borrowed) {
+        this.borrowed = borrowed;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public static ArrayList<Book> getBs() {
+        return bs;
+    }
+
+    public static void setBs(ArrayList<Book> bs) {
+        Book.bs = bs;
+    }
+
+    public void renewBook(String newTitle) {
+        this.title = newTitle;
+        System.out.println("Gia hạn thành công. Tiêu đề sách mới: " + this.title);
+    }
+
+    public static Book getBook(ArrayList<Book> books, String title) {
+        for (Book book : books) {
+            if (book.getTitle().equalsIgnoreCase(title)) {
+                return book;
+            }
+        }
+        return null;
     }
 
     @Override
     public String toString() {
-        return "Book{" + "id = '" + id +
+        return "Book{" + "id = '" + id +"type = '"+type+
                 ", title='" + title + '\'' +
                 ", author='" + author + '\'' +
                 ", publicationyear='" + publicationyear + '\'' +
@@ -114,4 +139,9 @@ public class Book {
                 ", price=" + price +
                 '}';
     }
+    public String bookBR(){
+        return "Book{" + "id = '" + id +
+                    '}';
+    }
+
 }

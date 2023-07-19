@@ -9,7 +9,7 @@ import java.util.Calendar;
 public class LibrarianManagement {
     public void addLibrarian() {
         String id = CheckInput.enterString("Mời nhập mã thủ thư", Validator.REGEX_LIBRARIAN, (idStr) -> {
-            for (Librarian l : Librarian.arrlb) {
+            for (Librarian l : Librarian.lbs) {
                 if (l.getId().equals(idStr)) {
                     return true;
                 }

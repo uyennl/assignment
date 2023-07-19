@@ -1,19 +1,24 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
 public class Borrowing {
     private Calendar borrowingDate;
     private Calendar returnDate;
+    public static ArrayList<Borrowing> brs = new ArrayList<>();
 
     public Borrowing() {
     }
+
 
     public Borrowing(Calendar borrowingDate, Calendar returnDate) {
         this.borrowingDate = borrowingDate;
         this.returnDate = returnDate;
     }
+
+
 
     public Calendar getBorrowingDate() {
         return borrowingDate;
