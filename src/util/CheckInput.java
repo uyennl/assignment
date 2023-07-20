@@ -126,7 +126,20 @@ public class CheckInput {
             }
         }
     }
+    public static int enterInt(String mess) {
+        int intVar;
+        while (true) {
+            System.out.println("Enter " + mess + " :");
+            try {
+                intVar = Integer.parseInt(sc.nextLine().trim());
 
+            } catch (NumberFormatException e) {
+                System.out.println(ERR_MESSAGE);
+                continue;
+            }
+        return intVar;
+        }
+    }
     public static int enterInt(String mess, boolean check) {
         int intVar;
         while (true) {

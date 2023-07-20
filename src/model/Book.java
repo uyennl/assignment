@@ -20,7 +20,21 @@ public class Book {
     public Book() {
     }
 
-    public Book(String id,String type, String title, String author, int publicationyear, String nxb, long price) {
+    public Book(String id, String title, String author) {
+        this.id = id;
+        this.title = title;
+        this.author = author;
+    }
+    public void returnBook() {
+        quantity++;
+    }
+
+    public void borrowBook() {
+            quantity--;
+    }
+
+
+    public Book(String id, String type, String title, String author, int publicationyear, String nxb, long price) {
         this.id = id;
         this.type = type;
         this.title = title;

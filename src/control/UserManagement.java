@@ -1,5 +1,7 @@
 package control;
 
+import model.Book;
+import model.BorrowCard;
 import model.User;
 import util.CheckInput;
 import util.Validator;
@@ -10,6 +12,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import util.CheckInput;
 import java.text.SimpleDateFormat;
+import java.util.Scanner;
+import java.util.function.Predicate;
 
 public class UserManagement {
     private String fileSave="Customer.txt";
@@ -33,6 +37,101 @@ public class UserManagement {
         User.uss.add(u);
         return u;
     }
+    public static void deleteUser() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Nhập ID người dùng cần xóa: ");
+        String id = scanner.nextLine();
+
+        User userToDelete = null;
+        for(User user : User.uss) {
+            if(user.getId().equals(id)) {
+                userToDelete = user;
+                break;
+            }
+        }
+
+        if(userToDelete != null) {
+            User.uss.remove(userToDelete);
+            System.out.println("Xóa người dùng thành công!");
+        } else {
+            System.out.println("Không tìm thấy người dùng có ID " + id);
+        }
+    }
+
+    public static void searchUserByID() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Nhập ID người dùng cần tìm kiếm: ");
+        String id = scanner.nextLine();
+
+        boolean found = false;
+        for(User user : User.uss) {
+            if(user.getId().equals(id)) {
+                System.out.println("Tìm thấy người dùng:");
+                System.out.println(user.toString());
+                found = true;
+                break;
+            }
+        }
+
+        if(!found) {
+            System.out.println("Không tìm thấy người dùng có ID " + id);
+        }
+    }
+
+    public static void searchUserByName() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Nhập tên người dùng cần tìm kiếm: ");
+        String name = scanner.nextLine();
+
+        boolean found = false;
+        for(User user : User.uss) {
+            if(user.getName().equalsIgnoreCase(name)) {
+                System.out.println("Tìm thấy người dùng:");
+                System.out.println(user.toString());
+                found = true;
+            }
+        }
+
+        if(!found) {
+            System.out.println("Không tìm thấy người dùng có tên " + name);
+        }
+    }
+
+    public static void searchOver(){
+        String idUser = CheckInput.enterString("Mời nhập mã đọc giả ", Validator.REGEX_USER_ID);
+        ArrayList<User> searchU = BorrowCardManagement.searchU(i -> i.getId().equals(idUser));
+        ArrayList<BorrowCard> searchBC = BorrowCardManagement.searchBC(i->i.getUsers().equals(searchU));
+        Calendar returnbook =  searchBC.get(0).getBroBorrowings().getReturnDate();
+        Calendar now = Calendar.getInstance();
+        ArrayList<Book> searchB = BorrowCardManagement.searchB(i->i.getId().equals(searchBC));
+            if(returnbook.after(now)){
+                System.out.println("bạn đã trả sách rồi");
+            }
+            else {
+                System.out.println("Bạn chưa trả sách");
+                searchB.forEach(i-> System.out.println(i.bookBR()));
+                System.out.println("Hạn Trả là: " + returnbook );
+                System.out.println("Trả sách đi rồi cho mượn");
+            }
+
+
+    }
+//    public void searchOverdueBooks() {
+//        System.out.println("Danh sách người dùng có sách quá hạn chưa trả:");
+//        boolean found = false;
+//        for(User user : User.uss) {
+//            if(user.hasOverdueBooks()) {
+//                System.out.println(user.toString());
+//                found = true;
+//            }
+//        }
+//
+//        if(!found) {
+//            System.out.println("Không có người dùng nào có sách quá hạn chưa trả.");
+//        }
+//    }
+
+
     public void saveFileUser(){
         try(BufferedWriter writer = new BufferedWriter(new FileWriter(fileSave))) {
             for(User usez: User.uss){
@@ -57,11 +156,8 @@ public class UserManagement {
                     String sex = data[3];
                     String phone = data[4];
                     String birthStr = data[5].trim();
-                    DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                    LocalDate dateOfBirth = LocalDate.parse(birthStr, dateFormat);
-                    // Chuyển đổi LocalDate thành Calendar
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
                     Calendar birth = Calendar.getInstance();
-                    birth.set(dateOfBirth.getYear(), dateOfBirth.getMonthValue() - 1, dateOfBirth.getDayOfMonth());
                     User user = new User(id, name, age, sex, phone, birth);
                     User.uss.add(user);
                 }

@@ -3,16 +3,16 @@ package view;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public abstract class  MenuGeneric<T> {
+public abstract class Menu<T> {
 
     protected String title;
     protected ArrayList<T> options;
     static Scanner sc = new Scanner(System.in);
 
-    public MenuGeneric() {
+    public Menu() {
     }
 
-    public MenuGeneric(String title, String[] option) {
+    public Menu(String title, String[] option) {
         this.title = title;
         this.options = new ArrayList<>();
         for (String s : option) {
